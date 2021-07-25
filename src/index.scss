@@ -1,0 +1,11 @@
+.board {
+  display: flex;
+
+  .panel {
+    margin: 0 1em;
+    padding: 1em;
+    border: 1px solid green;
+    width: 100%;
+  }
+  
+}
