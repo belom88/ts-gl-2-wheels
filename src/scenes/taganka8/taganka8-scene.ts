@@ -6,6 +6,7 @@ import vertexShaderSource from "./taganka8.vert.glsl";
 import fragmentShaderSource from "./taganka8.frag.glsl";
 import { GlCamera } from "../../core/gl-camera";
 import { WheelsModel } from "./wheels-model";
+import { ProjectionData } from "../../types/projection";
 
 export class Taganka8Scene {
   private vsSource: string = vertexShaderSource;
@@ -15,7 +16,11 @@ export class Taganka8Scene {
 
   private programInfo: ProgramInfo | null = null;
 
-  constructor(public gl: WebGLRenderingContext, public camera: GlCamera) {
+  constructor(
+    public gl: WebGLRenderingContext,
+    public camera: GlCamera,
+    public projectionData: ProjectionData
+  ) {
     const program = initShaderProgram(gl, this.vsSource, this.fsSource);
     if (!program) {
       return;
@@ -57,10 +62,7 @@ export class Taganka8Scene {
     // Tell WebGL to use our program when drawing
     this.gl.useProgram(this.programInfo.program);
 
-    const fieldOfView = 45;
-    const aspect = this.gl.canvas.width / this.gl.canvas.height;
-    const zNear = 0.5;
-    const zFar = 1000.0;
+    const { fieldOfView, aspect, zNear, zFar } = this.projectionData;
     const projectionMatrix = new GlMatrix().perspective(
       fieldOfView,
       aspect,

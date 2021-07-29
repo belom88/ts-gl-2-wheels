@@ -5,6 +5,7 @@ import "./index.scss";
 import { Point } from "./types/point";
 import { GlCamera } from "./core/gl-camera";
 import { GlVector } from "./core/gl-vector";
+import { ProjectionData } from "./types/projection";
 
 const glContext: GlContext = new GlContext("canvas");
 
@@ -29,8 +30,15 @@ if (glContext.gl === null) {
   throw new Error("Gl context hasn't been found");
 }
 
-const camera = new GlCamera(30, 20, 50, 0, 0, 5);
-const scene = new Taganka8Scene(glContext.gl, camera);
+const projectionData: ProjectionData = {
+  fieldOfView: 45,
+  aspect: glContext.gl.canvas.width / glContext.gl.canvas.height,
+  zNear: 0.5,
+  zFar: 1000.0,
+};
+
+const camera = new GlCamera(30, 20, 50, 0, 0, 5, glContext.gl, projectionData);
+const scene = new Taganka8Scene(glContext.gl, camera, projectionData);
 let thenTime: number = 0;
 
 const animationAngleSpan = document.getElementById("animationAngle");
@@ -87,8 +95,6 @@ function canvasMouseMove(event: MouseEvent) {
     y: event.clientY - dragStart.y,
   };
   if (inDrag) {
-    dragDelta.x *= 0.05;
-    dragDelta.y *= 0.05;
     if (event.ctrlKey) {
       inRotation = true;
       inDrag = false;
