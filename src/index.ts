@@ -9,7 +9,6 @@ import { ProjectionData } from "./types/projection";
 
 const glContext: GlContext = new GlContext("canvas");
 
-let delta = 0;
 const canvasElement: HTMLCanvasElement =
   document.getElementsByTagName("canvas")[0];
 canvasElement.addEventListener("mousedown", canvasMouseDown);
@@ -17,14 +16,6 @@ canvasElement.addEventListener("mousemove", canvasMouseMove);
 canvasElement.addEventListener("mouseleave", canvasDragEnd);
 canvasElement.addEventListener("mouseup", canvasDragEnd);
 canvasElement.addEventListener("wheel", canvasZoom);
-document.addEventListener("keypress", (e) => {
-  if (e.key === '.' || e.key === '>' || e.key === 'ю') {
-    delta+=7;
-  } else if (e.key === ',' || e.key === '<' || e.key === 'б') {
-    delta-=7;
-  }
-  render(0);
-});
 
 if (glContext.gl === null) {
   throw new Error("Gl context hasn't been found");
@@ -50,7 +41,6 @@ function render(nowTime: number) {
   const deltaTime = nowTime - thenTime;
   thenTime = nowTime;
   scene.drawScene(deltaTime);
-  delta = 0;
   requestAnimationFrame(render);
   if (animationAngleSpan) {
     animationAngleSpan.innerText =
